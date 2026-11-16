@@ -851,7 +851,8 @@ RicActive:
         If i_ProgTrack <> 4 Then
             If Val(s_Lev1) > g_ThrAuto AndAlso RTrim(LblLock.Text) = "LOCK" AndAlso
                Math.Abs(Val(s_LevAz1)) < g_ThrAz AndAlso Math.Abs(Val(s_LevEl1)) < g_ThrEl Then
-                If i_ProgTrack = 1 Then
+                ' VB6: passa ad Autotrack solo con entrambi i freni rilasciati
+                If i_ProgTrack = 1 AndAlso LblElTBrk.Text = "RELEASED" AndAlso LblAzTBrk.Text = "RELEASED" Then
                     TmrTimeoutMSG(ACU).Enabled = True
                     b_Ricezione(ACU) = False
                     b_int(ACU) = True

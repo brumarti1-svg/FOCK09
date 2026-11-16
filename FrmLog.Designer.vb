@@ -351,7 +351,7 @@ Partial Class FrmLog
         Me.MnuPresetPol.Name = "MnuPresetPol"
         Me.MnuPresetPol.Size = New System.Drawing.Size(170, 26)
         Me.MnuPresetPol.Text = "Polarization"
-        Me.MnuPresetPol.Visible = False
+        Me.MnuPresetPol.Visible = False   ' VB6 K09: visibile ma senza effetto (frmPreset non gestisce i_Assi = 3)
         '
         'MnuResetACU
         '
@@ -1009,6 +1009,7 @@ Partial Class FrmLog
         '
         Me.LblAzStow.BackColor = System.Drawing.Color.Yellow
         Me.LblAzStow.Location = New System.Drawing.Point(755, 24)
+        Me.LblAzStow.Visible = False   ' K09: nascosto nel VB6
         Me.LblAzStow.Name = "LblAzStow"
         Me.LblAzStow.Size = New System.Drawing.Size(75, 18)
         Me.LblAzStow.TabIndex = 36
@@ -1017,6 +1018,7 @@ Partial Class FrmLog
         '
         Me.LblAzAligned.BackColor = System.Drawing.Color.Yellow
         Me.LblAzAligned.Location = New System.Drawing.Point(836, 23)
+        Me.LblAzAligned.Visible = False   ' K09: nascosto nel VB6
         Me.LblAzAligned.Name = "LblAzAligned"
         Me.LblAzAligned.Size = New System.Drawing.Size(63, 18)
         Me.LblAzAligned.TabIndex = 37
@@ -1073,7 +1075,6 @@ Partial Class FrmLog
         Me.Label1.Size = New System.Drawing.Size(50, 16)
         Me.Label1.TabIndex = 11
         Me.Label1.Text = "Pol.Err."
-        Me.Label1.Visible = False
         '
         'LblPolTag
         '
@@ -1139,7 +1140,6 @@ Partial Class FrmLog
         Me.TxtPolErr.ReadOnly = True
         Me.TxtPolErr.Size = New System.Drawing.Size(54, 22)
         Me.TxtPolErr.TabIndex = 6
-        Me.TxtPolErr.Visible = False
         '
         'LblPolFault
         '
@@ -1149,7 +1149,6 @@ Partial Class FrmLog
         Me.LblPolFault.Size = New System.Drawing.Size(44, 20)
         Me.LblPolFault.TabIndex = 7
         Me.LblPolFault.Text = "Fault"
-        Me.LblPolFault.Visible = False
         '
         'LblAllarme16
         '
@@ -1174,7 +1173,6 @@ Partial Class FrmLog
         Me.LblAllarme17.TabIndex = 9
         Me.LblAllarme17.Text = "CCW"
         Me.LblAllarme17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LblAllarme17.Visible = False
         '
         'LblAllarme18
         '
@@ -1187,7 +1185,6 @@ Partial Class FrmLog
         Me.LblAllarme18.TabIndex = 10
         Me.LblAllarme18.Text = "CW"
         Me.LblAllarme18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LblAllarme18.Visible = False
         '
         'PnlStatus
         '
@@ -1872,6 +1869,7 @@ Partial Class FrmLog
         Me.LblConfCNL6in.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblConfCNL6in.Font = New System.Drawing.Font("Arial", 9.0!, System.Drawing.FontStyle.Bold)
         Me.LblConfCNL6in.Location = New System.Drawing.Point(172, 708)
+        Me.LblConfCNL6in.Visible = False   ' K09: nascosto nel VB6
         Me.LblConfCNL6in.Name = "LblConfCNL6in"
         Me.LblConfCNL6in.Size = New System.Drawing.Size(44, 27)
         Me.LblConfCNL6in.TabIndex = 37

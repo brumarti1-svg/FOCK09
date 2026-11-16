@@ -331,8 +331,8 @@ Partial Public Class FrmLog
                 LblPCU.Text = If((vBytesold(5) And BIT2) = BIT2, "PCU", "ACU")
                 LblPCU.BackColor = If((vBytesold(5) And BIT2) = BIT2, Color.Red, Color.Lime)
 
-                LblElTBrk.Text = If((vBytesold(5) And BIT4) = BIT4, "RELEASED", "APPLIED ")
-                LblAzTBrk.Text = If((vBytesold(5) And BIT3) = BIT3, "RELEASED", "APPLIED ")
+                LblElTBrk.Text = If((vBytesold(5) And BIT3) = BIT3, "RELEASED", "APPLIED ")
+                LblAzTBrk.Text = If((vBytesold(5) And BIT4) = BIT4, "RELEASED", "APPLIED ")
 
                 LblEmergency.BackColor = If((vBytesold(6) And BIT3) = BIT3, Color.Lime, Color.Red)
                 LblEmergency1.BackColor = If((vBytesold(6) And BIT4) = BIT4, Color.Lime, Color.Red)
@@ -396,8 +396,7 @@ Partial Public Class FrmLog
                 LblAzSpeed.Text = s_AzTS
                 LblElSpeed.Text = s_ElTS
 
-                ' C10: LNA in linea e stato polarizzatore dal byte 10
-                ' (blocco commentato nel VB6 di FOC6).
+                ' LNA in linea dal byte 10
                 If (vBytesold(10) And BIT1) = BIT1 Then
                     LblLNA.Text = "1"
                 ElseIf (vBytesold(10) And BIT2) = BIT2 Then
@@ -405,19 +404,34 @@ Partial Public Class FrmLog
                 ElseIf (vBytesold(10) And BIT3) = BIT3 Then
                     LblLNA.Text = "3"
                 End If
+                ' K09: polarizzazione dell'errore dal BIT4 del byte 10; senso
+                ' della polarizzazione dal BIT3 del byte 9 (V/H in lineare,
+                ' RHCP/LHCP in circolare); "Running" se l'ACU è in Preset
+                ' della polarizzazione (modo 1 e byte 14 BIT3).
+                TxtPolErr.Text = If((vBytesold(10) And BIT4) = BIT4, "RHCP", "LHCP")
+                Dim presetPol As Boolean = (s_Mod And &HF) = 1 AndAlso (vBytesold(14) And BIT3) = BIT3
+                Dim senso As Boolean = (vBytesold(9) And BIT3) = BIT3
                 Select Case i_Pol
                     Case 0
-                        If (vBytesold(10) And BIT3) = BIT3 Then
-                            LblPol1.Text = "Linear"
-                            If IsNumeric(Mid$(s_POL, 1, 4)) Then TxtPol.Text = Format$(Val(Mid$(s_POL, 1, 4)) / 10, "#00.0")
-                        Else
+                        TxtPol.Visible = True
+                        If presetPol Then
                             TxtPol.Text = ""
                             LblPol1.Text = "Running"
+                        Else
+                            LblPol1.Text = "Linear"
+                            LblPol.Text = If(senso, "Vertical", "Horizontal")
                         End If
                     Case 1
-                        TxtPol.Text = ""
-                        LblPol1.Text = If((vBytesold(10) And BIT3) = BIT3, "Circular", "Running")
+                        TxtPol.Visible = False
+                        If presetPol Then
+                            TxtPol.Text = ""
+                            LblPol1.Text = "Running"
+                        Else
+                            LblPol1.Text = "Circular"
+                            LblPol.Text = If(senso, "RHCP", "LHCP")
+                        End If
                 End Select
+                If IsNumeric(Mid$(s_POL, 1, 4)) Then TxtPol.Text = Format$(Val(Mid$(s_POL, 1, 4)) / 10, "#00.0")
             End If
 
             Select Case i_BackupAuto
@@ -449,10 +463,8 @@ Partial Public Class FrmLog
                 Case Else : LblCommand.Text = ""
             End Select
 
-            ' Formato C10 "###00.000", senza il filtro "> 0" di FOC6.
-            If IsNumeric(f_Frequency) Then TxtFrequency.Text = Format$(f_Frequency, "###00.000")
+            ' K09: solo la frequenza beacon (Frequency out/Power Out non aggiornati, nascosti)
             If IsNumeric(f_FrqBeacon) Then TxtFreqBeacon.Text = Format$(f_FrqBeacon, "###00.000")
-            If IsNumeric(f_PowerOut) Then TxtPowerOut.Text = f_PowerOut
 
             If i_Alarm Then AggiornaGriglia()
         Catch

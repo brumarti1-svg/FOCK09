@@ -294,9 +294,13 @@ Partial Public Class FrmRicezione
         If TxtAzEr IsNot Nothing Then TxtAzEr.Text = s_LevAz
         If TxtElEr IsNot Nothing Then TxtElEr.Text = s_LevEl
 
-        ' Freni di tracking Az/El (vBytes(11), bit 3 = Az, bit 1 = El).
-        If LblAzTBrk IsNot Nothing Then LblAzTBrk.Text = If((vBytes(11) And BIT3) = BIT3, "ON", "OFF")
-        If LblElTBrk IsNot Nothing Then LblElTBrk.Text = If((vBytes(11) And BIT1) = BIT1, "ON", "OFF")
+        ' Freni di tracking (VB6 frmRicezione di FOCK09, fa testo per la lettura):
+
+        ' vBytesold(5), El = BIT3, Az = BIT4; "RELEASED" serve anche all'Augmented.
+
+        If LblElTBrk IsNot Nothing Then LblElTBrk.Text = If((vBytesold(5) And BIT3) = BIT3, "RELEASED", "APPLIED ")
+
+        If LblAzTBrk IsNot Nothing Then LblAzTBrk.Text = If((vBytesold(5) And BIT4) = BIT4, "RELEASED", "APPLIED ")
 
     End Sub
 
