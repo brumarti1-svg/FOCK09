@@ -44,41 +44,36 @@ Public Class FrmParametri
 
         If Campo = "?" Then
             ClearAllTxt(Me)
-            pos = 7
-            TxtAOS.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = pos + 6
-            TxtEOS.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = 19
-            TxtSPCC.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = pos + 6
-            TxtSPCW.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
-            pos = pos + 6
-            TxtSPDW.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
-            pos = pos + 5
-            TxtSPUP.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
-            pos = 41
+            ' K09: tracciato del messaggio parametri della versione comune
+            ' (ComuniIntelsatImmersatnew\frmParametri.frm), diverso da C10/FOC6
+            ' nella prima parte (fino alla posizione 72); da AOS (73) in poi è
+            ' uguale. Niente SS/STEP in K09.
+            pos = 9
+            TxtIT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtIT.Text  = Mid(Messaggio, pos, 2)
+            TxtAT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtAT.Text  = Mid(Messaggio, pos, 2)
+            TxtET.Text = Mid(Messaggio, pos, 2)
+            pos = 17
+            TxtXT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtET.Text  = Mid(Messaggio, pos, 2)
-            pos = 51
-            TxtXT.Text  = Mid(Messaggio, pos, 2)
+            TxtYT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtYT.Text  = Mid(Messaggio, pos, 2)
+            TxtRT.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
-            TxtRT.Text  = Mid(Messaggio, pos, 2)
+            TxtCY.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
+            TxtBM.Text = Mid(Messaggio, pos, 1)
+            pos = pos + 1
             TxtATTS.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
             TxtATTA.Text = Mid(Messaggio, pos, 2)
             pos = pos + 2
             TxtATTE.Text = Mid(Messaggio, pos, 2)
-            pos = pos + 3
-            TxtAli.Text  = Mid(Messaggio, pos, 1)
+            pos = pos + 2
+            TxtAli.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
-            TxtEli.Text  = Mid(Messaggio, pos, 1)
+            TxtEli.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
             TxtPli.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
@@ -91,6 +86,22 @@ Public Class FrmParametri
             TxtMR.Text = Mid(Messaggio, pos, 1)
             pos = pos + 1
             TxtPT.Text = Mid(Messaggio, pos, 1)
+            pos = pos + 1
+            TxtFST.Text = Mid(Messaggio, pos, 1)
+            pos = pos + 1
+            TxtMT.Text = Mid(Messaggio, pos, 2)
+            pos = pos + 2
+            TxtSPCC.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
+            pos = pos + 6
+            TxtSPCW.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 3)
+            pos = pos + 6
+            TxtSPDW.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
+            pos = pos + 5
+            TxtSPUP.Text = Mid(Messaggio, pos, 2) & "." & Mid(Messaggio, pos + 2, 3)
+            pos = pos + 5
+            TxtSPPCC.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 1)
+            pos = pos + 4
+            TxtSPPCW.Text = Mid(Messaggio, pos, 3) & "." & Mid(Messaggio, pos + 3, 1)
 
             ' Tabelle di calibrazione per settore (AO/EO/PO) e campi singoli —
             ' porting diretto dal VB6 di FOC6 (Prog0357-FOC6\frmParametri.frm,
@@ -281,6 +292,10 @@ Public Class FrmParametri
         End If
         If TxtUSAZ.Text <> "" And TxtUSEL.Text <> "" Then
             Buffer = Buffer & "US " & TxtUSAZ.Text & " " & LTrim(TxtUSEL.Text) & vbCrLf
+        End If
+        ' K09: posizione di back-up (VB6 comune: "BP az el")
+        If TxtBKAZ.Text <> "" And TxtBKEL.Text <> "" Then
+            Buffer = Buffer & "BP " & TxtBKAZ.Text & " " & LTrim(TxtBKEL.Text) & vbCrLf
         End If
 
         ' Tabelle di calibrazione per settore (AO/EO/PO) e campi singoli — scrittura nel Buffer
@@ -1064,6 +1079,14 @@ Public Class FrmParametri
             TxtUSEL.Text = Mid(sBuffer, Gr_file + 9, 6)
             Gr_file  = InStr(1, sBuffer1, "US", 1)
             sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 17, Len(sBuffer1) - 17)
+        End If
+        ' K09: posizione di back-up (VB6 comune, campi da 7 caratteri)
+        Gr_file = InStr(1, sBuffer, "BP", 1)
+        If Gr_file > 0 Then
+            TxtBKAZ.Text = Mid(sBuffer, Gr_file + 3, 7).Trim()
+            TxtBKEL.Text = Mid(sBuffer, Gr_file + 10, 7).Trim()
+            Gr_file = InStr(1, sBuffer1, "BP", 1)
+            If Gr_file > 0 Then sBuffer1 = Mid$(sBuffer1, 1, Gr_file - 1) & Mid$(sBuffer1, Gr_file + 19, Len(sBuffer1) - 19)
         End If
 
         ' Tabelle di calibrazione per settore (AO/EO/PO) e campi singoli — lettura dal file .PAR salvato

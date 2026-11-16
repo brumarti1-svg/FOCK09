@@ -116,6 +116,9 @@ Partial Class FrmParametri
         Me.LblUS = New System.Windows.Forms.Label()
         Me.TxtUSAZ = New System.Windows.Forms.TextBox()
         Me.TxtUSEL = New System.Windows.Forms.TextBox()
+        Me.LblBP = New System.Windows.Forms.Label()
+        Me.TxtBKAZ = New System.Windows.Forms.TextBox()
+        Me.TxtBKEL = New System.Windows.Forms.TextBox()
         Me.LblFine = New System.Windows.Forms.Label()
         Me.TxtSA00 = New System.Windows.Forms.TextBox()
         Me.TxtSA01 = New System.Windows.Forms.TextBox()
@@ -473,6 +476,7 @@ Partial Class FrmParametri
         Me.LblSS.AutoSize = True
         Me.LblSS.Location = New System.Drawing.Point(411, 98)
         Me.LblSS.Name = "LblSS"
+        Me.LblSS.Visible = False   ' K09: parametro assente nel form comune VB6
         Me.LblSS.Size = New System.Drawing.Size(107, 16)
         Me.LblSS.TabIndex = 16
         Me.LblSS.Text = "SS - Step Speed"
@@ -481,6 +485,7 @@ Partial Class FrmParametri
         '
         Me.TxtSS.Location = New System.Drawing.Point(627, 91)
         Me.TxtSS.Name = "TxtSS"
+        Me.TxtSS.Visible = False   ' K09: parametro assente nel form comune VB6
         Me.TxtSS.Size = New System.Drawing.Size(45, 22)
         Me.TxtSS.TabIndex = 17
         Me.TxtSS.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
@@ -803,6 +808,7 @@ Partial Class FrmParametri
         Me.LblSTEP.AutoSize = True
         Me.LblSTEP.Location = New System.Drawing.Point(6, 94)
         Me.LblSTEP.Name = "LblSTEP"
+        Me.LblSTEP.Visible = False   ' K09: parametro assente nel form comune VB6
         Me.LblSTEP.Size = New System.Drawing.Size(110, 16)
         Me.LblSTEP.TabIndex = 8
         Me.LblSTEP.Text = "STEP - Step Size"
@@ -811,6 +817,7 @@ Partial Class FrmParametri
         '
         Me.TxtSTEP.Location = New System.Drawing.Point(247, 91)
         Me.TxtSTEP.Name = "TxtSTEP"
+        Me.TxtSTEP.Visible = False   ' K09: parametro assente nel form comune VB6
         Me.TxtSTEP.Size = New System.Drawing.Size(65, 22)
         Me.TxtSTEP.TabIndex = 9
         Me.TxtSTEP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
@@ -1089,9 +1096,12 @@ Partial Class FrmParametri
         Me.gbStowUnstow.Controls.Add(Me.LblUS)
         Me.gbStowUnstow.Controls.Add(Me.TxtUSAZ)
         Me.gbStowUnstow.Controls.Add(Me.TxtUSEL)
+        Me.gbStowUnstow.Controls.Add(Me.LblBP)
+        Me.gbStowUnstow.Controls.Add(Me.TxtBKAZ)
+        Me.gbStowUnstow.Controls.Add(Me.TxtBKEL)
         Me.gbStowUnstow.Location = New System.Drawing.Point(770, 305)
         Me.gbStowUnstow.Name = "gbStowUnstow"
-        Me.gbStowUnstow.Size = New System.Drawing.Size(523, 87)
+        Me.gbStowUnstow.Size = New System.Drawing.Size(523, 115)
         Me.gbStowUnstow.TabIndex = 60
         Me.gbStowUnstow.TabStop = False
         Me.gbStowUnstow.Text = "STOW/UNSTOW COORDINATES"
@@ -1145,6 +1155,30 @@ Partial Class FrmParametri
         Me.TxtUSEL.Size = New System.Drawing.Size(60, 22)
         Me.TxtUSEL.TabIndex = 5
         Me.TxtUSEL.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'LblBP (K09: posizione di back-up, parametro "BP")
+        '
+        Me.LblBP.AutoSize = True
+        Me.LblBP.Location = New System.Drawing.Point(5, 74)
+        Me.LblBP.Name = "LblBP"
+        Me.LblBP.TabIndex = 6
+        Me.LblBP.Text = "BP - Back-up Position"
+        '
+        'TxtBKAZ
+        '
+        Me.TxtBKAZ.Location = New System.Drawing.Point(241, 66)
+        Me.TxtBKAZ.Name = "TxtBKAZ"
+        Me.TxtBKAZ.Size = New System.Drawing.Size(70, 22)
+        Me.TxtBKAZ.TabIndex = 7
+        Me.TxtBKAZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'TxtBKEL
+        '
+        Me.TxtBKEL.Location = New System.Drawing.Point(321, 66)
+        Me.TxtBKEL.Name = "TxtBKEL"
+        Me.TxtBKEL.Size = New System.Drawing.Size(60, 22)
+        Me.TxtBKEL.TabIndex = 8
+        Me.TxtBKEL.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'LblFine
         '
@@ -2365,6 +2399,9 @@ Partial Class FrmParametri
     Friend WithEvents TxtWSEL  As System.Windows.Forms.TextBox
     Friend WithEvents TxtUSAZ  As System.Windows.Forms.TextBox
     Friend WithEvents TxtUSEL  As System.Windows.Forms.TextBox
+    Friend WithEvents LblBP As System.Windows.Forms.Label
+    Friend WithEvents TxtBKAZ As System.Windows.Forms.TextBox
+    Friend WithEvents TxtBKEL As System.Windows.Forms.TextBox
     ' Static labels
     Friend LblIT As System.Windows.Forms.Label
     Friend LblRT As System.Windows.Forms.Label
