@@ -66,6 +66,7 @@ Partial Class FrmPol1
         Me.LblType.AutoSize = True
         Me.LblType.Location = New System.Drawing.Point(10, 80)
         Me.LblType.Name = "LblType"
+        Me.LblType.Visible = False   ' K09: nessun modo, solo angolo (PLP all'ACU)
         Me.LblType.Text = "Mode"
         '
         'CmbMode
@@ -74,6 +75,7 @@ Partial Class FrmPol1
         Me.CmbMode.Items.AddRange(New Object() {"S", "L", "C"})
         Me.CmbMode.Location = New System.Drawing.Point(120, 77)
         Me.CmbMode.Name = "CmbMode"
+        Me.CmbMode.Visible = False   ' K09: nessun modo, solo angolo (PLP all'ACU)
         Me.CmbMode.Size = New System.Drawing.Size(50, 23)
         '
         'LblLegenda
@@ -81,6 +83,7 @@ Partial Class FrmPol1
         Me.LblLegenda.AutoSize = True
         Me.LblLegenda.Location = New System.Drawing.Point(180, 80)
         Me.LblLegenda.Name = "LblLegenda"
+        Me.LblLegenda.Visible = False   ' K09: nessun modo, solo angolo (PLP all'ACU)
         Me.LblLegenda.Text = "S Stand-By   L Linear   C Circular"
         '
         'CmdOK

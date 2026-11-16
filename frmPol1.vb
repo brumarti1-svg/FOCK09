@@ -1,22 +1,21 @@
 ' ============================================================
-' frmPol1.vb — convertito da Prog0347-FOCC10\frmPol1.frm (VB6)
-' Telespazio FOC-C10 — DYNATRON
+' frmPol1.vb — convertito da ComuniIntelsatImmersatnew\frmPol1.frm (VB6, usato da K09)
+' Telespazio FOC-K09 — DYNATRON
 ' UI di comando del polarizzatore, aperta dal bottone "POL" su
 ' frmRicezione.
 '
-' Differenza genuina rispetto a FOC6: FOC6 comandava il
-' polarizzatore via SNMP (frmManager) con tipo Linear/Circular e
-' due decimali; C10 lo comanda sulla seriale del canale PCU con il
-' messaggio "Z <modo><angolo>" incorniciato da CheckSum, modo
-' S (Stand-By) / L (Linear) / C (Circular), un decimale (±99.9).
+' Differenze rispetto a C10 (da cui è partito il porting): K09 non
+' usa la PCU; l'angolo va all'ACU con il messaggio "PLP <angolo>"
+' incorniciato da CheckSum, senza modo (niente S/L/C: Mode e legenda
+' nascosti), e viene memorizzato in Satelliti.PolAngle del satellite
+' corrente e in g_ValPol (C03 invece lo salva nella fase attiva).
+' I tasti +/- e le frecce cambiano solo il valore a video: il comando parte con OK (nel VB6 comune il cmdOK_Click in
+' coda a cmdUp/cmdDown è commentato). Un decimale, ±99.9.
 ' Il valore corrente arriva dall'ACU in s_POL ("+123" = +12.3°).
 '
-' Separatore decimale: il VB6 usava Format$, che segue il locale
-' di Windows (su un PC it-IT avrebbe inviato "12,3"); qui l'angolo
-' si formatta sempre con il punto (InvariantCulture), come si
-' aspetta il protocollo seriale. L'input dell'operatore si legge
-' con Val (accetta solo il punto) dopo aver sostituito l'eventuale
-' virgola.
+' Separatore decimale: l'angolo si formatta sempre con il punto
+' (InvariantCulture), come si aspetta il protocollo ACU. L'input
+' dell'operatore accetta sia "." sia ",".
 ' ============================================================
 
 Imports System.Globalization
@@ -53,30 +52,45 @@ Public Class FrmPol1
     Private Sub CmdAnnulla_Click(sender As Object, e As EventArgs) Handles CmdAnnulla.Click
         i_Inter = CSng(Val(LeggiFileIni("Canale1", "Inter")))
         i_Cont = 1
-        frmRicezione.tmrTimeoutMSG(PCU).Enabled = False
-        frmRicezione.tmrTimeoutMSG(PCU).Enabled = True
+        frmRicezione.tmrTimeoutMSG(ACU).Enabled = False
+        frmRicezione.tmrTimeoutMSG(ACU).Enabled = True
         Me.KeyPreview = False
         Me.Close()
     End Sub
 
     Private Sub CmdOK_Click(sender As Object, e As EventArgs) Handles CmdOK.Click
-        d_Pol = CmbMode.Text
-
         Dim angolo As Double
         If Not LeggiAngolo(MskElevazione.Text, angolo) OrElse Math.Abs(angolo) > 99.9 Then
             MskElevazione.Text = ""
             Return
         End If
 
-        b_int(PCU) = True
-        b_Ricezione(PCU) = True
+        ' Angolo nel catalogo, per il satellite corrente (VB6 comune)
+        Try
+            Dim rs2 = dbOrbite.OpenRecordset("SELECT * FROM [Satelliti] order by NomeSatellite", dbOpenDynaset)
+            rs2.FindFirst("NomeSatellite ='" & s_Satellite & "'")
+            If Not rs2.NoMatch Then
+                rs2.Edit()
+                rs2!PolAngle = angolo
+                rs2.Update()
+            End If
+            rs2.Close()
+        Catch ex As Exception
+            WriteError(0, "frmPol1 - Satelliti: " & ex.Message)
+        End Try
+
+        b_Ricezione(ACU) = False
+        b_int(ACU) = True
+        i_Cont = 2
+        Attesa(0.2)
+
         MskElevazione.Text = FormattaAngolo(angolo)
-        Dim s_program As String = "Z " & CmbMode.Text & MskElevazione.Text
+        Dim s_program As String = "PLP " & MskElevazione.Text
         g_ValPol = MskElevazione.Text
         Dim lunghezza As Integer = Len(s_program) + 6
-        frmRicezione.tmrTimeoutMSG(PCU).Enabled = False
-        Dim s_Pola As String = CheckSum(lunghezza.ToString("00") & s_program)
-        Invio(s_Pola, PCU)
+        frmRicezione.tmrTimeoutMSG(ACU).Enabled = False
+        SEND_ACU = CheckSum(lunghezza.ToString("00") & s_program)
+        InvioACU(SEND_ACU)
         Me.KeyPreview = True
         TxtFreccia.Focus()
     End Sub
@@ -96,15 +110,17 @@ Public Class FrmPol1
 
     Private Sub FrmPol1_Activated(sender As Object, e As EventArgs) Handles Me.Activated
         Dim corrente As Double
-        If PolCorrente(corrente) Then MskElevazione.Text = FormattaAngolo(corrente)
+        If PolCorrente(corrente) Then
+            MskElevazione.Text = FormattaAngolo(corrente)
+        Else
+            MskElevazione.Text = "+00.0"                 ' VB6 comune
+        End If
         CmbInc.Text = "0.1"
-        If CmbMode.Items.Contains(d_Pol) Then CmbMode.Text = d_Pol
         TxtFreccia.Focus()
         Me.KeyPreview = True
     End Sub
 
-    ' +/- : nel VB6 di C10 ogni passo invia subito il comando
-    ' (cmdOK_Click in coda a cmdUp/cmdDown), a differenza di FOC6.
+    ' +/- : cambiano solo il valore a video, l'invio è con OK (K09).
     Private Sub CmdDown_Click(sender As Object, e As EventArgs) Handles CmdDown.Click
         Passo(-1)
     End Sub
@@ -125,7 +141,6 @@ Public Class FrmPol1
         If ElPro > 99.9 Then ElPro = 99.9
         If ElPro < -99.9 Then ElPro = -99.9
         MskElevazione.Text = FormattaAngolo(ElPro)
-        CmdOK_Click(Nothing, EventArgs.Empty)
     End Sub
 
     ' Freccia Su/Giù inoltrata ai bottoni +/- — sia dal form (focus
