@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Simulazione" />
+  </Configurations>
+  <Project Path="FOCK09.vbproj" />
+  <Project Path="../ComuniIntelsatIntersat1/ComuniIntelsatIntersat1.shproj" />
+</Solution>

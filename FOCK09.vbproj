@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Codice condiviso con le altre applicazioni DYNATRON (ex ComuniIntelsatImmersatnew1 in VB6) -->
+  <Import Project="..\ComuniIntelsatIntersat1\ComuniIntelsatIntersat1.projitems" Label="Shared" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <MyType>WindowsForms</MyType>
+    <StartupObject>FOCK09.My.MyApplication</StartupObject>
+    <RootNamespace>FOCK09</RootNamespace>
+    <AssemblyName>FOCK09</AssemblyName>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <Deterministic>true</Deterministic>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ProjectGuid>{2A3D870B-F575-4958-B802-AF77D566EF47}</ProjectGuid>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Simulazione = versione di sviluppo senza hardware (frame ACU finti). Debug e Release, la versione operativa, non contengono il codice di simulazione. -->
+    <Configurations>Debug;Release;Simulazione</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Simulazione|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>SIMULAZIONE=True</DefineConstants>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <!-- Global VB.NET Imports -->
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+  <!-- Framework references non incluse automaticamente nei progetti SDK net48 -->
+  <ItemGroup>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <!-- NuGet packages (PackageReference sostituisce packages.config) -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Quartz" Version="3.18.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118.0" />
+  </ItemGroup>
+
+  <!-- DependentUpon per i file Designer (SDK usa Update invece di Include) -->
+  <ItemGroup>
+    <Compile Update="frmMain.Designer.vb"><DependentUpon>frmMain.vb</DependentUpon></Compile>
+    <Compile Update="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+
+  <!-- File My Project -->
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Update="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="Orbite.db" />
+    <None Include="SMOD1574.ini" />
+  </ItemGroup>
+
+  <!-- Loghi — stessi file di BTS1 (Telespazio/DYNATRON), copiati nella cartella output -->
+  <ItemGroup>
+    <Content Include="Resources\imgLogoLeft.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\imgLogoRight.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- EmbeddedResource con DependentUpon -->
+  <ItemGroup>
+    <EmbeddedResource Update="frmMain.resx"><DependentUpon>frmMain.vb</DependentUpon></EmbeddedResource>
+    <EmbeddedResource Update="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
