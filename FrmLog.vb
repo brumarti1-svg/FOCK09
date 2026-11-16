@@ -404,32 +404,21 @@ Partial Public Class FrmLog
                 ElseIf (vBytesold(10) And BIT3) = BIT3 Then
                     LblLNA.Text = "3"
                 End If
-                ' K09: polarizzazione dell'errore dal BIT4 del byte 10; senso
-                ' della polarizzazione dal BIT3 del byte 9 (V/H in lineare,
-                ' RHCP/LHCP in circolare); "Running" se l'ACU è in Preset
-                ' della polarizzazione (modo 1 e byte 14 BIT3).
+                ' K09, come frmRicezione (fa testo): polarizzazione dell'errore dal
+                ' BIT4 del byte 10; senso dal BIT3 del byte 9 (V/H in lineare,
+                ' RHCP/LHCP in circolare). Il "Running" in Preset polarizzazione del
+                ' frmLog VB6 non c'è nel frmRicezione VB6 e non viene portato.
                 TxtPolErr.Text = If((vBytesold(10) And BIT4) = BIT4, "RHCP", "LHCP")
-                Dim presetPol As Boolean = (s_Mod And &HF) = 1 AndAlso (vBytesold(14) And BIT3) = BIT3
                 Dim senso As Boolean = (vBytesold(9) And BIT3) = BIT3
                 Select Case i_Pol
                     Case 0
                         TxtPol.Visible = True
-                        If presetPol Then
-                            TxtPol.Text = ""
-                            LblPol1.Text = "Running"
-                        Else
-                            LblPol1.Text = "Linear"
-                            LblPol.Text = If(senso, "Vertical", "Horizontal")
-                        End If
+                        LblPol1.Text = "Linear"
+                        LblPol.Text = If(senso, "Vertical", "Horizontal")
                     Case 1
                         TxtPol.Visible = False
-                        If presetPol Then
-                            TxtPol.Text = ""
-                            LblPol1.Text = "Running"
-                        Else
-                            LblPol1.Text = "Circular"
-                            LblPol.Text = If(senso, "RHCP", "LHCP")
-                        End If
+                        LblPol1.Text = "Circular"
+                        LblPol.Text = If(senso, "RHCP", "LHCP")
                 End Select
                 If IsNumeric(Mid$(s_POL, 1, 4)) Then TxtPol.Text = Format$(Val(Mid$(s_POL, 1, 4)) / 10, "#00.0")
             End If

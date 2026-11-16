@@ -121,7 +121,7 @@ Partial Public Class FrmRicezione
                     risposta = testata & "DP" & TagDato & vbCr & vbLf
                     TagDato = ""
                 Case "FD"
-                    risposta = testata & "FD" & g_Frequenza & vbCr & vbLf
+                    risposta = testata & "FD" & f_FrqBeacon & vbCr & vbLf      ' K09: frequenza letta dal D/C
                 Case "DE"
                     risposta = testata & "DE" & TagError & vbCr & vbLf
                 Case "DT"
@@ -667,10 +667,10 @@ Partial Public Class FrmRicezione
                 Case "TA", "TB", "SB", "QT"
                     FrmDownConverter.PresentaDown(frame)
                 Case "FE"
-                    Dim freq As String = Mid$(frame, 5, 9)
+                    Dim freq As String = Mid$(frame, 5, 10)                 ' K09: 10 cifre
                     If IsNumeric(freq) AndAlso Val(freq) <> 0 Then
                         f_FrqBeacon = CSng(Val(freq) / 100000)          ' Hz*100 -> MHz
-                        g_Frequenza = Format$(f_FrqBeacon, "###00.0#")
+                        g_Frequenza = Format$(f_FrqBeacon, "#0000.0#")  ' formato K09
                         If f_FrqBeacon > 0 Then TxtFrqBeacon.Text = Format$(f_FrqBeacon, "#0000.000")   '29/10/2022
                     End If
             End Select

@@ -55,8 +55,8 @@ Partial Public Class FrmRicezione
 
         If IsNumeric(Mid$(s_Az, 1, 6)) Then TxtAz.Text = Format$(Val(Mid$(s_Az, 1, 6)) / 1000, "000.000")
         If IsNumeric(Mid$(s_El, 1, 5)) Then TxtEl.Text = Format$(Val(Mid$(s_El, 1, 5)) / 1000, "00.000")
-        TxtAzEr.Text = s_LevAz
-        TxtElEr.Text = s_LevEl
+        TxtAzEr.Text = Format$(Val(s_LevAz), "###0.00")   ' K09: due decimali
+        TxtElEr.Text = Format$(Val(s_LevEl), "###0.00")
 
         Dim lnaPrima As String = LblLNA.Text
         If (vBytesold(10) And BIT1) = BIT1 Then
@@ -69,26 +69,27 @@ Partial Public Class FrmRicezione
         If lnaPrima <> LblLNA.Text Then ricChange = True
         g_LNA = LblLNA.Text
 
+        ' K09: polarizzazione dell'errore (Pol.Err.) dal BIT4 del byte 10; un
+        ' cambio fa ricaricare la fase (le fasi sono indicizzate per Pol.Err.)
+        Dim polErrPrima As String = TxtPolErr.Text
+        TxtPolErr.Text = If((vBytesold(10) And BIT4) = BIT4, "RHCP", "LHCP")
+        If polErrPrima <> TxtPolErr.Text AndAlso polErrPrima <> "" Then ricChange = True
+        g_PolErr = TxtPolErr.Text
+
+        ' K09: senso della polarizzazione dal BIT3 del byte 9: Vertical/Horizontal
+        ' in lineare, RHCP/LHCP in circolare (nessun "Running": il controllo
+        ' del Preset polarizzazione è commentato nel VB6 di frmRicezione)
         Dim polPrima As String = LblPol.Text
-        Dim inPosizione As Boolean = (vBytesold(10) And BIT3) = BIT3
+        Dim senso As Boolean = (vBytesold(9) And BIT3) = BIT3
         Select Case i_Pol
             Case 0
-                If inPosizione Then
-                    LblPol1.Text = "Linear"
-                    If IsNumeric(Mid$(s_POL, 1, 4)) Then TxtPol.Text = Format$(Val(Mid$(s_POL, 1, 4)) / 10, "#00.0")
-                Else
-                    TxtPol.Text = ""
-                    LblPol1.Text = "Running"
-                End If
+                LblPol1.Text = "Linear"
+                LblPol.Text = If(senso, "Vertical", "Horizontal")
+                If IsNumeric(Mid$(s_POL, 1, 4)) Then TxtPol.Text = Format$(Val(Mid$(s_POL, 1, 4)) / 10, "#00.0")
             Case 1
                 TxtPol.Text = ""
-                If inPosizione Then
-                    LblPol1.Text = "Circular"
-                    LblPol.Text = If((vBytesold(10) And BIT4) = BIT4, "RHCP", "LHCP")
-                Else
-                    LblPol1.Text = "Running"
-                    LblPol.Text = ""
-                End If
+                LblPol1.Text = "Circular"
+                LblPol.Text = If(senso, "RHCP", "LHCP")
         End Select
         If polPrima <> LblPol.Text Then ricChange = True
         g_Polar = LblPol.Text
@@ -291,8 +292,8 @@ Partial Public Class FrmRicezione
         ' Colonna "Error": livello errore di tracking Az/El, dal buffer ACU
         ' (s_LevAz/s_LevEl, nessuna scala — porting diretto da VB6
         ' "TxtAzEr = s_LevAz" in frmRicezione.frm/lblRVR_Change).
-        If TxtAzEr IsNot Nothing Then TxtAzEr.Text = s_LevAz
-        If TxtElEr IsNot Nothing Then TxtElEr.Text = s_LevEl
+        If TxtAzEr IsNot Nothing Then TxtAzEr.Text = Format$(Val(s_LevAz), "###0.00")   ' K09: due decimali
+        If TxtElEr IsNot Nothing Then TxtElEr.Text = Format$(Val(s_LevEl), "###0.00")
 
         ' Freni di tracking (VB6 frmRicezione di FOCK09, fa testo per la lettura):
 

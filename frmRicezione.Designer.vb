@@ -1426,6 +1426,7 @@ Partial Public Class FrmRicezione
         Me.LblConfCNL6in.BackColor = System.Drawing.Color.Yellow
         Me.LblConfCNL6in.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LblConfCNL6in.Location = New System.Drawing.Point(982, 296)
+        Me.LblConfCNL6in.Visible = False   ' K09: nascosto nel VB6
         Me.LblConfCNL6in.Name = "LblConfCNL6in"
         Me.LblConfCNL6in.Size = New System.Drawing.Size(43, 29)
         Me.LblConfCNL6in.TabIndex = 55
