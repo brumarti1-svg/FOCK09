@@ -689,45 +689,53 @@ Partial Class FrmConfigurazione
 
         ' -- Canale 6  (POLARIZZAZIONE) --
         Me.LblCh6.Text = "POLARIZZAZIONE" : Me.LblCh6.Location = New System.Drawing.Point(5, 185) : Me.LblCh6.AutoSize = True
+        Me.LblCh6.Visible = False   ' K09: nascosto nel VB6
 
         Me.CmbPorCNLin6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CmbPorCNLin6.Location = New System.Drawing.Point(195, 185)
         Me.CmbPorCNLin6.Name = "CmbPorCNLin6"
+        Me.CmbPorCNLin6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.CmbPorCNLin6.Size = New System.Drawing.Size(80, 21)
         Me.CmbPorCNLin6.TabIndex = 0
 
         Me.CmbVelCNLin6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CmbVelCNLin6.Location = New System.Drawing.Point(280, 185)
         Me.CmbVelCNLin6.Name = "CmbVelCNLin6"
+        Me.CmbVelCNLin6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.CmbVelCNLin6.Size = New System.Drawing.Size(70, 21)
         Me.CmbVelCNLin6.TabIndex = 1
 
         Me.CmbParCNLin6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CmbParCNLin6.Location = New System.Drawing.Point(355, 185)
         Me.CmbParCNLin6.Name = "CmbParCNLin6"
+        Me.CmbParCNLin6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.CmbParCNLin6.Size = New System.Drawing.Size(45, 21)
         Me.CmbParCNLin6.TabIndex = 2
 
         Me.CmbDatCNLin6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CmbDatCNLin6.Location = New System.Drawing.Point(405, 185)
         Me.CmbDatCNLin6.Name = "CmbDatCNLin6"
+        Me.CmbDatCNLin6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.CmbDatCNLin6.Size = New System.Drawing.Size(40, 21)
         Me.CmbDatCNLin6.TabIndex = 3
 
         Me.CmbStoCNLin6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.CmbStoCNLin6.Location = New System.Drawing.Point(450, 185)
         Me.CmbStoCNLin6.Name = "CmbStoCNLin6"
+        Me.CmbStoCNLin6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.CmbStoCNLin6.Size = New System.Drawing.Size(40, 21)
         Me.CmbStoCNLin6.TabIndex = 4
 
         Me.mskTimeOUT6.Location = New System.Drawing.Point(495, 185)
         Me.mskTimeOUT6.Name = "mskTimeOUT6"
+        Me.mskTimeOUT6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.mskTimeOUT6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.mskTimeOUT6.Size = New System.Drawing.Size(50, 21)
         Me.mskTimeOUT6.TabIndex = 5
 
         Me.TxtInter6.Location = New System.Drawing.Point(550, 185)
         Me.TxtInter6.Name = "TxtInter6"
+        Me.TxtInter6.Visible = False   ' K09: canale 6 (POL) seriale nascosto nel VB6
         Me.TxtInter6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.TxtInter6.Size = New System.Drawing.Size(50, 21)
         Me.TxtInter6.TabIndex = 6

@@ -13,7 +13,8 @@ Imports System.Windows.Forms
 '     anche per PCU; allarme GRF "GRF Com Error"
 '   - polling Down Converter: frequenza (CmdGRF "FE?") e attenuazioni
 '     A/B (FrmDownConverter.CmdATA/CmdATB) invece di stato/tensioni
-'   - polling periodico del polarizzatore (CmdPol, ogni i_InterPol s)
+'   - K09: niente polling del polarizzatore (C10: CmdPol ogni i_InterPol s);
+'     soglia orario ACU 3 s (C10: 10 s)
 '   - richiesta di stato ACU solo se la precedente ha avuto risposta
 '     (Not b_Ricezione(ACU)), come nel VB6 di C10
 '   - controllo orario ACU con soglia 10 s e controllo della data;
@@ -759,13 +760,13 @@ Partial Public Class FrmMain
                     ' C10: g_Irig = "A" (impostato dal parser ACU quando l'ora
                     ' viene dall'orologio ACU, non da IRIG) -> l'ora/la data
                     ' dell'ACU si riallineano al PC con CmdTime/CmdDate.
-                    If diffSec > 10 And Not b_Parametri And g_Irig = "A" Then
+                    If diffSec > 3 And Not b_Parametri And g_Irig = "A" Then          ' K09: 3 s
                         Attesa(0.2)
                         CmdTime()
                     ElseIf OraPc.Date <> OraACU.Date And Not b_Parametri And g_Irig = "A" Then
                         Attesa(0.2)
                         CmdDate()
-                    ElseIf diffSec > 10 And Not b_Parametri Then       ' C10: 10 s (FOC6: 3 s)
+                    ElseIf diffSec > 3 And Not b_Parametri Then       ' K09: 3 s (come FOC6; C10: 10 s)
                         If Cont3 > 1800 Then
                             ScriviAlarm("Time ACU different", 1)
                             Cont3 = 0
@@ -883,22 +884,8 @@ Partial Public Class FrmMain
                 End If
             End If
 
-            ' Interrogazione polarizzatore (C10, seriale PCU): ogni i_InterPol s.
-            Dim MilSecP1 As Long
-            If MilSec < MilSecP Then
-                MilSecP1 = CLng(MilSec + MilOra - MilSecP)
-            Else
-                MilSecP1 = CLng(MilSec - MilSecP)
-            End If
-            If MilSecP1 >= i_InterPol * 1000 Then
-                MilSecP = MilSec
-                b_Ricezione(PCU) = True
-                b_int(PCU) = True
-                If frmRicezioneInstance IsNot Nothing Then
-                    frmRicezioneInstance.CmdPol()
-                    frmRicezioneInstance.TmrTimeoutMSG(PCU).Enabled = True
-                End If
-            End If
+            ' K09: nessuna interrogazione del polarizzatore (la PCU non è
+            ' interrogata nel VB6; la polarizzazione arriva dall'ACU).
 
             Dim MilSecL1 As Long
             If MilSec < MilSecL Then

@@ -92,7 +92,7 @@ Public Class FrmDownConverter
 
     Private Sub TxtFreq_KeyUp(sender As Object, e As KeyEventArgs) Handles TxtFreq.KeyUp
         If e.KeyCode = Keys.Return Then
-            If IsNumeric(TxtFreq.Text) Then
+            If IsNumeric(TxtFreq.Text) AndAlso Val(TxtFreq.Text) > 0 Then   ' K09: solo frequenze positive
                 ' Format$(stringa, "...") non converte in numero come in VB6:
                 ' restituisce la picture letterale invece del valore. Va
                 ' passato il valore numerico (CDbl), non la stringa .Text.
